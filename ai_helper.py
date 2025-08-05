@@ -23,8 +23,20 @@ class AIHelper:
         self._initialize_client()
     
     def _initialize_client(self):
-        """Initialize OpenAI client"""
-        api_key = os.getenv('OPENAI_API_KEY')
+        """Initialize OpenAI client with Streamlit secrets or environment variables"""
+        api_key = None
+
+        # Try to get API key from Streamlit secrets first (most secure)
+        try:
+            if hasattr(st, 'secrets') and 'OPENAI_API_KEY' in st.secrets:
+                api_key = st.secrets['OPENAI_API_KEY']
+        except Exception:
+            pass
+
+        # Fallback to environment variable for local development
+        if not api_key:
+            api_key = os.getenv('OPENAI_API_KEY')
+
         if api_key and api_key != 'your_openai_api_key_here':
             try:
                 self.client = openai.OpenAI(api_key=api_key)
