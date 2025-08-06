@@ -167,7 +167,10 @@ def show_ai_status(ai_helper):
     st.sidebar.markdown("---")
     st.sidebar.markdown("### 🤖 AI Configuration")
 
-    if ai_helper.is_configured():
+    # Test if API key is actually valid by trying to use it
+    is_valid_key = ai_helper.is_configured() and ai_helper.test_connection()
+
+    if is_valid_key:
         st.sidebar.markdown("""
         <div style="background-color: #333333; padding: 1rem; border-radius: 4px; text-align: center; color: white; border: 1px solid #555555;">
             <h4>✅ AI Status</h4>
@@ -184,7 +187,43 @@ def show_ai_status(ai_helper):
                 del os.environ['OPENAI_API_KEY']
             st.sidebar.success("API Key removed!")
             st.rerun()
+
+    elif ai_helper.is_configured() and not is_valid_key:
+        # API key exists but is invalid
+        st.sidebar.markdown("""
+        <div style="background-color: #333333; padding: 1rem; border-radius: 4px; text-align: center; color: white; border: 1px solid #555555;">
+            <h4>❌ AI Status</h4>
+            <p>Invalid API Key</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Option to remove invalid API key
+        if st.sidebar.button("Remove Invalid API Key", type="secondary"):
+            if 'openai_api_key' in st.session_state:
+                del st.session_state.openai_api_key
+            if 'OPENAI_API_KEY' in os.environ:
+                del os.environ['OPENAI_API_KEY']
+            st.sidebar.success("Invalid API Key removed!")
+            st.rerun()
+
+        # Also show input for new key
+        api_key = st.sidebar.text_input(
+            "Enter Valid OpenAI API Key:",
+            type="password",
+            help="Current API key is invalid. Enter a valid one.",
+            placeholder="sk-..."
+        )
+
+        if st.sidebar.button("Update API Key", type="primary"):
+            if api_key and api_key.strip():
+                st.session_state.openai_api_key = api_key.strip()
+                os.environ['OPENAI_API_KEY'] = api_key.strip()
+                st.sidebar.success("✅ API Key updated!")
+                st.rerun()
+            else:
+                st.sidebar.error("Please enter a valid API key")
     else:
+        # No API key configured
         st.sidebar.markdown("""
         <div style="background-color: #333333; padding: 1rem; border-radius: 4px; text-align: center; color: white; border: 1px solid #555555;">
             <h4>⚠️ AI Status</h4>
@@ -210,14 +249,15 @@ def show_ai_status(ai_helper):
             else:
                 st.sidebar.error("Please enter a valid API key")
 
-        st.sidebar.markdown("""
-        <small style="color: #888888;">
-        Get your API key from: <br>
-        <a href="https://platform.openai.com/account/api-keys" target="_blank" style="color: #4CAF50;">
-        platform.openai.com/account/api-keys
-        </a>
-        </small>
-        """, unsafe_allow_html=True)
+    # Always show the help link
+    st.sidebar.markdown("""
+    <small style="color: #888888;">
+    Get your API key from: <br>
+    <a href="https://platform.openai.com/account/api-keys" target="_blank" style="color: #4CAF50;">
+    platform.openai.com/account/api-keys
+    </a>
+    </small>
+    """, unsafe_allow_html=True)
 
 
 def main():

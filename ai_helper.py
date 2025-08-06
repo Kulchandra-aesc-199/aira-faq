@@ -63,11 +63,11 @@ class AIHelper:
         """Refresh the OpenAI client (useful when API key is updated)"""
         self._initialize_client()
     
-    def test_connection(self) -> bool:
+    def test_connection(self, show_errors: bool = False) -> bool:
         """Test OpenAI API connection"""
         if not self.is_configured():
             return False
-        
+
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -76,7 +76,8 @@ class AIHelper:
             )
             return True
         except Exception as e:
-            st.error(f"OpenAI API test failed: {str(e)}")
+            if show_errors:
+                st.error(f"OpenAI API test failed: {str(e)}")
             return False
     
     def enhance_question(self, question: str) -> Optional[str]:
