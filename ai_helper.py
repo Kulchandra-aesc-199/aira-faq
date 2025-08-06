@@ -23,15 +23,23 @@ class AIHelper:
         self._initialize_client()
     
     def _initialize_client(self):
-        """Initialize OpenAI client with Streamlit secrets or environment variables"""
+        """Initialize OpenAI client with Streamlit session state, secrets, or environment variables"""
         api_key = None
 
-        # Try to get API key from Streamlit secrets first (most secure)
+        # Try to get API key from Streamlit session state first (for UI input)
         try:
-            if hasattr(st, 'secrets') and 'OPENAI_API_KEY' in st.secrets:
-                api_key = st.secrets['OPENAI_API_KEY']
+            if hasattr(st, 'session_state') and 'openai_api_key' in st.session_state:
+                api_key = st.session_state.openai_api_key
         except Exception:
             pass
+
+        # Try to get API key from Streamlit secrets (most secure for deployment)
+        if not api_key:
+            try:
+                if hasattr(st, 'secrets') and 'OPENAI_API_KEY' in st.secrets:
+                    api_key = st.secrets['OPENAI_API_KEY']
+            except Exception:
+                pass
 
         # Fallback to environment variable for local development
         if not api_key:
@@ -46,7 +54,14 @@ class AIHelper:
     
     def is_configured(self) -> bool:
         """Check if AI is properly configured"""
+        # Re-initialize if client is None but API key might be available now
+        if self.client is None:
+            self._initialize_client()
         return self.client is not None
+
+    def refresh_client(self):
+        """Refresh the OpenAI client (useful when API key is updated)"""
+        self._initialize_client()
     
     def test_connection(self) -> bool:
         """Test OpenAI API connection"""

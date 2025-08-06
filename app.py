@@ -163,21 +163,60 @@ def create_simple_navigation():
 
 
 def show_ai_status(ai_helper):
-    """Show minimal AI status in sidebar"""
+    """Show AI configuration and status in sidebar"""
     st.sidebar.markdown("---")
+    st.sidebar.markdown("### 🤖 AI Configuration")
+
     if ai_helper.is_configured():
         st.sidebar.markdown("""
         <div style="background-color: #333333; padding: 1rem; border-radius: 4px; text-align: center; color: white; border: 1px solid #555555;">
-            <h4>AI Status</h4>
+            <h4>✅ AI Status</h4>
             <p>Ready to create FAQs</p>
         </div>
         """, unsafe_allow_html=True)
+
+        # Option to remove API key
+        if st.sidebar.button("Remove API Key", type="secondary"):
+            if 'openai_api_key' in st.session_state:
+                del st.session_state.openai_api_key
+            # Also remove from environment if set
+            if 'OPENAI_API_KEY' in os.environ:
+                del os.environ['OPENAI_API_KEY']
+            st.sidebar.success("API Key removed!")
+            st.rerun()
     else:
         st.sidebar.markdown("""
         <div style="background-color: #333333; padding: 1rem; border-radius: 4px; text-align: center; color: white; border: 1px solid #555555;">
-            <h4>AI Status</h4>
-            <p>Set OPENAI_API_KEY to enable AI</p>
+            <h4>⚠️ AI Status</h4>
+            <p>API Key Required</p>
         </div>
+        """, unsafe_allow_html=True)
+
+        # API key input
+        api_key = st.sidebar.text_input(
+            "OpenAI API Key:",
+            type="password",
+            help="Enter your OpenAI API key to enable AI features",
+            placeholder="sk-..."
+        )
+
+        if st.sidebar.button("Save API Key", type="primary"):
+            if api_key and api_key.strip():
+                # Store in session state and environment
+                st.session_state.openai_api_key = api_key.strip()
+                os.environ['OPENAI_API_KEY'] = api_key.strip()
+                st.sidebar.success("✅ API Key saved!")
+                st.rerun()
+            else:
+                st.sidebar.error("Please enter a valid API key")
+
+        st.sidebar.markdown("""
+        <small style="color: #888888;">
+        Get your API key from: <br>
+        <a href="https://platform.openai.com/account/api-keys" target="_blank" style="color: #4CAF50;">
+        platform.openai.com/account/api-keys
+        </a>
+        </small>
         """, unsafe_allow_html=True)
 
 
@@ -192,6 +231,9 @@ def main():
     # Sidebar navigation
     current_page = create_simple_navigation()
     show_ai_status(ai_helper)
+
+    # Refresh AI helper in case API key was just added
+    ai_helper.refresh_client()
 
     # Main content
     if current_page == "View FAQs":

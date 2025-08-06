@@ -1,0 +1,92 @@
+[
+  {
+    "id": "faq-candidate_management-how-do-i-track-426406",
+    "category": "candidate_management",
+    "tags": [
+      "tracking",
+      "applications",
+      "candidates",
+      "pipeline"
+    ],
+    "question": "How do I track candidate applications in The Hire Hub?",
+    "alternate_questions": [
+      "How can I monitor candidate applications?",
+      "Where do I check application status?",
+      "What's the process for tracking candidates?",
+      "How do I view candidate progress?"
+    ],
+    "answer": "To track candidate applications, navigate to the Candidates tab, select the desired job position, and view the application pipeline. You can filter by status, source, and date range."
+  },
+  {
+    "id": "faq-interview_scheduling-how-do-i-schedule-426406",
+    "category": "interview_scheduling",
+    "tags": [
+      "interviews",
+      "scheduling",
+      "panelists",
+      "availability"
+    ],
+    "question": "How do I schedule interviews with multiple panelists?",
+    "alternate_questions": [
+      "How can I set up panel interviews?",
+      "What's the process for multi-panelist interviews?",
+      "How do I coordinate interviews with multiple people?",
+      "Can I schedule group interviews?"
+    ],
+    "answer": "In The Hire Hub, go to the Interview Scheduling section, select the candidate, choose 'Multi-Panel Interview', add panelists by email, and the system will find common availability slots."
+  },
+  {
+    "id": "faq-ai_features-how-do-i-configure-426406",
+    "category": "ai_features",
+    "tags": [
+      "ai",
+      "matching",
+      "candidates",
+      "configuration"
+    ],
+    "question": "How do I configure AI-powered candidate matching?",
+    "alternate_questions": [
+      "How can I set up automatic candidate matching?",
+      "Where do I configure AI matching settings?",
+      "How does the AI candidate scoring work?",
+      "Can I customize the matching algorithm?"
+    ],
+    "answer": "Navigate to Settings > AI Features, enable 'Smart Candidate Matching', set your matching criteria (skills, experience, location), and adjust the matching threshold. The system will automatically score candidates."
+  },
+  {
+    "id": "faq-integrations-how-do-i-integrate-426406",
+    "category": "integrations",
+    "tags": [
+      "integrations",
+      "job_boards",
+      "posting",
+      "sync"
+    ],
+    "question": "How do I integrate with external job boards?",
+    "alternate_questions": [
+      "How can I connect to job posting sites?",
+      "What job boards are supported?",
+      "How do I set up automatic job posting?",
+      "Can I sync with LinkedIn Jobs?"
+    ],
+    "answer": "Go to Settings > Integrations, select 'Job Boards', choose your preferred platforms (Indeed, LinkedIn, Glassdoor), enter API credentials, and configure posting templates. Jobs will sync automatically."
+  },
+  {
+    "id": "faq-analytics_reporting-how-do-i-generate-426406",
+    "category": "analytics_reporting",
+    "tags": [
+      "analytics",
+      "reports",
+      "metrics",
+      "dashboard"
+    ],
+    "question": "How do I generate hiring analytics hghgchreports?",
+    "alternate_questions": [
+      "How can I create hiring reports?",
+      "Where do I find analytics data?",
+      "What reports are available?",
+      "How do I export hiring metrics?"
+    ],
+    "answer": "Access the Analytics Dashboard from the main menu, select your date range and metrics, choose report type (summary, detailed, or custom), and click 'Generate Report'. You can export as PDF or Excel."
+  }
+]
